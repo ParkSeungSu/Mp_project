@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "891104888787",
+    "firebase_url": "https://sns-project-cb9e5.firebaseio.com",
+    "project_id": "sns-project-cb9e5",
+    "storage_bucket": "sns-project-cb9e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891104888787:android:1b25a414115623fe4f5126",
+        "android_client_info": {
+          "package_name": "halla.icsw.mysns"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891104888787-64trci124igdu0nfpne0cgsf9fl7736e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtphFIo8QfwlpjruJcPeltlfxCFwfNaQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891104888787-64trci124igdu0nfpne0cgsf9fl7736e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
