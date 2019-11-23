@@ -32,7 +32,11 @@ public class MemberInitActivity extends AppCompatActivity {
         findViewById(R.id.checkButton).setOnClickListener(onClickListener);
 
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -60,6 +64,7 @@ public class MemberInitActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(MemberInitActivity.this, "회원정보 등록을 성공하였습니다.", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -75,12 +80,6 @@ public class MemberInitActivity extends AppCompatActivity {
             Toast.makeText(this, "회원정보를 입력해주세요", Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    private void myStartMain(Class c) {
-        Intent intent = new Intent(this, c);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
     }
 
 

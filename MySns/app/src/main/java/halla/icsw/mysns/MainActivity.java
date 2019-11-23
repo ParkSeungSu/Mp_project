@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             myStartMain(SingUpActivity.class);
         } else {
             FirebaseFirestore db= FirebaseFirestore.getInstance();
-            DocumentReference docRf = db.collection("").document("");
+            DocumentReference docRf = db.collection("users").document(user.getUid());
             docRf.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d(TAG,"DocumentSnapshot data: "+document.getData());
                             } else {
                                 Log.d(TAG,"get failed with ", task.getException());
+                                myStartMain(MemberInitActivity.class);
                             }
                         }
                     } else {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            myStartMain(MemberInitActivity.class);
+
         }
 
         findViewById(R.id.logoutButton).setOnClickListener(onClickListener);
