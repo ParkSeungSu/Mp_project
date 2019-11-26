@@ -71,7 +71,7 @@ public class MemberInitActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(MemberInitActivity.this, "회원정보 등록에 실패!", Toast.LENGTH_SHORT).show();
-                                Log.w(TAG, "Error adding document", e);
+                                Log.v(TAG, "Error adding document", e);
                             }
                         });
             }

@@ -24,10 +24,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         if (user == null) {
             myStartMain(SingUpActivity.class);
         } else {
+            myStartMain(CameraActivity.class);
             FirebaseFirestore db= FirebaseFirestore.getInstance();
             DocumentReference docRf = db.collection("users").document(user.getUid());
             docRf.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 Log.d(TAG,"DocumentSnapshot data: "+document.getData());
                             } else {
-                                Log.d(TAG,"get failed with ", task.getException());
+                                Log.d(TAG,"No such document");
                                 myStartMain(MemberInitActivity.class);
                             }
                         }
@@ -69,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void myStartMain(Class c) {
         Intent intent = new Intent(this, c);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }
