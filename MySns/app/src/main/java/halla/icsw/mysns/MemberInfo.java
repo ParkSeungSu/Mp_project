@@ -5,7 +5,14 @@ public class MemberInfo {
     private String phone;
     private String birth;
     private String address;
-
+    private String photoUrl;
+    public MemberInfo(String name,String phone,String birth,String address,String photoUrl){
+        this.name=name;
+        this.phone=phone;
+        this.birth=birth;
+        this.address=address;
+        this.photoUrl=photoUrl;
+    }
     public MemberInfo(String name,String phone,String birth,String address){
         this.name=name;
         this.phone=phone;
@@ -43,5 +50,13 @@ public class MemberInfo {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

@@ -1,4 +1,4 @@
-package halla.icsw.mysns;
+package halla.icsw.mysns.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import halla.icsw.mysns.R;
 
 public class SingUpActivity extends AppCompatActivity {
 
