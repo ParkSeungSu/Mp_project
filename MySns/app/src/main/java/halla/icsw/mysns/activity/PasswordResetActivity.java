@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import halla.icsw.mysns.R;
 
-public class PasswordResetActivity extends AppCompatActivity {
+public class PasswordResetActivity extends BasicActivity {
 
     private FirebaseAuth mAuth;
 

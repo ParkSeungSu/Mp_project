@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
 import halla.icsw.mysns.R;
 import halla.icsw.mysns.fragment.Camera2BasicFragment;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends BasicActivity {
     private Camera2BasicFragment camera2BasicFragment;
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a

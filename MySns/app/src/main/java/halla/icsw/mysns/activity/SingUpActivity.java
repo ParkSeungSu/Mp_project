@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import halla.icsw.mysns.R;
 
-public class SingUpActivity extends AppCompatActivity {
+public class SingUpActivity extends BasicActivity {
 
     private FirebaseAuth mAuth;
 
