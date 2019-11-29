@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -47,10 +48,12 @@ public class MemberInitActivity extends BasicActivity {
     private ImageView profileImageView;
     private String profilePath;
     private FirebaseUser user;
+    private RelativeLayout loaderLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_init);
+        loaderLayout=findViewById(R.id.loaderlayout);
         profileImageView = findViewById(R.id.profileImageView);
         profileImageView.setOnClickListener(onClickListener);
         findViewById(R.id.checkButton).setOnClickListener(onClickListener);
@@ -84,7 +87,7 @@ public class MemberInitActivity extends BasicActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.checkButton:
-                    profileUpdate();
+                    storageUpdate();
                     break;
                 case R.id.profileImageView:
                     CardView cardView=findViewById(R.id.buttonsCard);
@@ -131,12 +134,13 @@ public class MemberInitActivity extends BasicActivity {
         }
     }
 
-    private void profileUpdate() {
+    private void storageUpdate() {
         final String name = ((EditText) findViewById(R.id.nameEditText)).getText().toString();
         final String phone = ((EditText) findViewById(R.id.phoneNumberEditText)).getText().toString();
         final String birth = ((EditText) findViewById(R.id.birthEditText)).getText().toString();
         final String address = ((EditText) findViewById(R.id.addressEditText)).getText().toString();
         if (name.length() > 0 && phone.length() > 9 && birth.length() > 5 && address.length() > 0) {
+            loaderLayout.setVisibility(View.VISIBLE);
            user = FirebaseAuth.getInstance().getCurrentUser();
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -145,7 +149,7 @@ public class MemberInitActivity extends BasicActivity {
 
          if(profilePath==null){
              MemberInfo memberInfo = new MemberInfo(name, phone, birth, address);
-             uploader(memberInfo);
+             storageUploader(memberInfo);
          }else{
              try {
                  InputStream stream = new FileInputStream(new File(profilePath));
@@ -165,7 +169,7 @@ public class MemberInitActivity extends BasicActivity {
                          if (task.isSuccessful()) {
                              Uri downloadUri = task.getResult();
                              MemberInfo memberInfo = new MemberInfo(name, phone, birth, address, downloadUri.toString());
-                             uploader(memberInfo);
+                             storageUploader(memberInfo);
                          } else {
                              Toast.makeText(MemberInitActivity.this, "회원정보 전송 오류", Toast.LENGTH_SHORT).show();
                          }
@@ -181,13 +185,14 @@ public class MemberInitActivity extends BasicActivity {
         }
 
     }
-private void uploader( MemberInfo memberInfo){
+private void storageUploader( MemberInfo memberInfo){
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     db.collection("users").document(user.getUid()).set(memberInfo)
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(MemberInitActivity.this, "회원정보 등록을 성공하였습니다.", Toast.LENGTH_SHORT).show();
+                    loaderLayout.setVisibility(View.GONE);
                     finish();
                 }
             })
@@ -195,6 +200,7 @@ private void uploader( MemberInfo memberInfo){
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(MemberInitActivity.this, "회원정보 등록에 실패!", Toast.LENGTH_SHORT).show();
+                    loaderLayout.setVisibility(View.GONE);
                     Log.v(TAG, "Error adding document", e);
                 }
             });

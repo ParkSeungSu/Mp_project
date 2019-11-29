@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,10 +52,13 @@ public class LoginActivity extends BasicActivity {
         String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
 
         if (email.length() > 0 && password.length() > 0) {
+           final RelativeLayout loaderLayout=findViewById(R.id.loaderlayout);
+            loaderLayout.setVisibility(View.VISIBLE);
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            loaderLayout.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
