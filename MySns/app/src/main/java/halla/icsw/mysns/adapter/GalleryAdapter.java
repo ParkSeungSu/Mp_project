@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,18 +23,18 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     private ArrayList<String> mDataset;
     private Activity activity;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public CardView cardView;
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
 
-        public MyViewHolder(CardView t) {
+        MyViewHolder(CardView t) {
             super(t);
             cardView = t;
         }
     }
 
-    public GalleryAdapter(Activity activity,ArrayList<String> myDataset) {
+    public GalleryAdapter(Activity activity, ArrayList<String> myDataset) {
         mDataset = myDataset;
-        this.activity=activity;
+        this.activity = activity;
     }
 
     @NonNull
@@ -44,9 +45,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent resultIntent=new Intent();
-                resultIntent.putExtra("profilePath",mDataset.get(galleryViewHolder.getAdapterPosition()));
-                activity.setResult(Activity.RESULT_OK,resultIntent);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("profilePath", mDataset.get(galleryViewHolder.getAdapterPosition()));
+                activity.setResult(Activity.RESULT_OK, resultIntent);
                 activity.finish();
             }
         });
@@ -55,8 +56,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-        CardView cardView=holder.cardView;
-        ImageView imageView=cardView.findViewById(R.id.imageView);
+        CardView cardView = holder.cardView;
+        ImageView imageView = cardView.findViewById(R.id.imageView);
         Glide.with(activity).load(mDataset.get(position)).centerCrop().override(500).into(imageView);
 
     }

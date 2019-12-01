@@ -103,18 +103,7 @@ public class MemberInitActivity extends BasicActivity {
                     myStartMain(CameraActivity.class);
                     break;
                 case R.id.gallery:
-                    if(ContextCompat.checkSelfPermission(MemberInitActivity.this,
-                            Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-                        ActivityCompat.requestPermissions(MemberInitActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-                        if(ActivityCompat.shouldShowRequestPermissionRationale(MemberInitActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)){
-
-                        }else{
-
-                            Toast.makeText(MemberInitActivity.this, "권한을 허용해 주세요.", Toast.LENGTH_SHORT).show();
-                        }
-                    }else {
-                        myStartMain(GalleryActivity.class);
-                    }
+                    myStartMain(GalleryActivity.class);
                     break;
             }
         }

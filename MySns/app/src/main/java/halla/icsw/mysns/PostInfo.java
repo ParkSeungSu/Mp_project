@@ -3,13 +3,13 @@ package halla.icsw.mysns;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class WriteInfo {
+public class PostInfo {
     private String title;
     private ArrayList<String>  Contents;
     private String publisher;
     private Date createdAt;
 
-    public WriteInfo(String title, ArrayList<String>  contents, String publisher,Date createdAt){
+    public PostInfo(String title, ArrayList<String>  contents, String publisher, Date createdAt){
       this.title=title;
       this.Contents=contents;
       this.publisher=publisher;

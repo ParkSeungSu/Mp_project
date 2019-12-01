@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import halla.icsw.mysns.R;
-import halla.icsw.mysns.WriteInfo;
+import halla.icsw.mysns.PostInfo;
 
 public class WritePostActivity extends BasicActivity {
 
@@ -106,7 +106,6 @@ public class WritePostActivity extends BasicActivity {
                     break;
                 case R.id.delete:
                     parent.removeView((View) selectedImageView.getParent());
-                    buttonsBackgroundLayout.setVisibility(View.GONE);
                     break;
 
             }
@@ -144,7 +143,8 @@ public class WritePostActivity extends BasicActivity {
                         }
                     } else {
                         contentsList.add(pathList.get(pathCount));
-                        final StorageReference mountainsRef = storageRef.child("posts/" + documentReference.getId() + "/" + pathCount + ".jpg");
+                        String[] pathArray=pathList.get(pathCount).split("\\.");
+                        final StorageReference mountainsRef = storageRef.child("posts/" + documentReference.getId() + "/" + pathCount + "."+pathArray[pathArray.length-1]);
                         try {
                             InputStream stream = new FileInputStream(new File(pathList.get(pathCount)));
                             StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
@@ -164,8 +164,8 @@ public class WritePostActivity extends BasicActivity {
                                             contentsList.set(index, uri.toString());
                                             successCount++;
                                             if (pathList.size() == successCount) {
-                                                WriteInfo writeInfo = new WriteInfo(title, contentsList, user.getUid(), new Date());
-                                                storeUploader(documentReference, writeInfo);
+                                                PostInfo postInfo = new PostInfo(title, contentsList, user.getUid(), new Date());
+                                                storeUploader(documentReference, postInfo);
                                                 for(int a=0;a<contentsList.size();a++){
                                                     Log.e("로그: ","콘텐츠: "+contentsList.get(a));
                                                 }
@@ -182,17 +182,16 @@ public class WritePostActivity extends BasicActivity {
                     }
                 }
             }
-            if(pathList.size()==0){
-                WriteInfo writeInfo = new WriteInfo(title, contentsList, user.getUid(), new Date());
-                storeUploader(documentReference, writeInfo);
-            }
+                PostInfo postInfo = new PostInfo(title, contentsList, user.getUid(), new Date());
+                storeUploader(documentReference, postInfo);
+
         } else {
             Toast.makeText(this, "제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void storeUploader(DocumentReference documentReference, WriteInfo writeInfo) {
-        documentReference.set(writeInfo)
+    private void storeUploader(DocumentReference documentReference, PostInfo postInfo) {
+        documentReference.set(postInfo)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -208,7 +207,7 @@ public class WritePostActivity extends BasicActivity {
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(writeInfo)
+        db.collection("posts").add(postInfo)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -219,7 +218,7 @@ public class WritePostActivity extends BasicActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(WritePostActivity.this, "회원정보 등록에 실패!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WritePostActivity.this, "게시물 등록에 실패!", Toast.LENGTH_SHORT).show();
                         Log.v(TAG, "Error adding document", e);
                     }
                 });
