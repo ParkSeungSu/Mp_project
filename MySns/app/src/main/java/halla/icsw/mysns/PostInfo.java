@@ -1,9 +1,10 @@
 package halla.icsw.mysns;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class PostInfo {
+public class PostInfo implements Serializable {
     private String title;
     private ArrayList<String>  Contents;
     private String publisher;
