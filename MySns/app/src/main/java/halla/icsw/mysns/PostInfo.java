@@ -8,12 +8,21 @@ public class PostInfo {
     private ArrayList<String>  Contents;
     private String publisher;
     private Date createdAt;
+    private String id;
 
-    public PostInfo(String title, ArrayList<String>  contents, String publisher, Date createdAt){
+    public PostInfo(String title, ArrayList<String>  contents, String publisher, Date createdAt,String id){
       this.title=title;
       this.Contents=contents;
       this.publisher=publisher;
       this.createdAt=createdAt;
+      this.id=id;
+    }
+    public PostInfo(String title, ArrayList<String>  contents, String publisher, Date createdAt){
+        this.title=title;
+        this.Contents=contents;
+        this.publisher=publisher;
+        this.createdAt=createdAt;
+
     }
 
     public String getTitle() {
@@ -46,5 +55,13 @@ public class PostInfo {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

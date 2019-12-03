@@ -106,6 +106,7 @@ public class WritePostActivity extends BasicActivity {
                     break;
                 case R.id.delete:
                     parent.removeView((View) selectedImageView.getParent());
+                    buttonsBackgroundLayout.setVisibility(View.GONE);
                     break;
 
             }
@@ -128,14 +129,22 @@ public class WritePostActivity extends BasicActivity {
             final ArrayList<String> contentsList = new ArrayList<>();
             user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseStorage storage = FirebaseStorage.getInstance();
-            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             StorageReference storageRef = storage.getReference();
-            final DocumentReference documentReference = firebaseFirestore.collection("posts").document();
+            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+            String id =getIntent().getStringExtra("id");
+            DocumentReference dr;
+            if(id==null){
+                dr=firebaseFirestore.collection("posts").document();
+            }else{
+                dr=firebaseFirestore.collection("posts").document(id);
+            }
+            final DocumentReference documentReference = dr;
 
             for (int i = 0; i < parent.getChildCount(); i++) {
                 LinearLayout linearLayout = (LinearLayout) parent.getChildAt(i);
                 for (int ii = 0; ii < linearLayout.getChildCount(); ii++) {
-                    View view = linearLayout.getChildAt(i);
+                    View view = linearLayout.getChildAt(ii);
                     if (view instanceof EditText) {
                         String text = ((EditText) view).getText().toString();
                         if (text.length() > 0) {
@@ -161,14 +170,12 @@ public class WritePostActivity extends BasicActivity {
                                     mountainsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
-                                            contentsList.set(index, uri.toString());
+
                                             successCount++;
+                                            contentsList.set(index, uri.toString());
                                             if (pathList.size() == successCount) {
                                                 PostInfo postInfo = new PostInfo(title, contentsList, user.getUid(), new Date());
                                                 storeUploader(documentReference, postInfo);
-                                                for(int a=0;a<contentsList.size();a++){
-                                                    Log.e("로그: ","콘텐츠: "+contentsList.get(a));
-                                                }
                                                 Toast.makeText(WritePostActivity.this, "업로드 완료!", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -181,10 +188,10 @@ public class WritePostActivity extends BasicActivity {
                         pathCount++;
                     }
                 }
-            }
+            }if(pathList.size()==0) {
                 PostInfo postInfo = new PostInfo(title, contentsList, user.getUid(), new Date());
                 storeUploader(documentReference, postInfo);
-
+            }
         } else {
             Toast.makeText(this, "제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show();
         }
@@ -196,32 +203,17 @@ public class WritePostActivity extends BasicActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         loaderLayout.setVisibility(View.GONE);
+                        Toast.makeText(WritePostActivity.this, "게시물 등록을 성공하였습니다.", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Toast.makeText(WritePostActivity.this, "게시물 등록에 실패!", Toast.LENGTH_SHORT).show();
                 loaderLayout.setVisibility(View.GONE);
 
             }
         });
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(postInfo)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(WritePostActivity.this, "게시물 등록을 성공하였습니다.", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(WritePostActivity.this, "게시물 등록에 실패!", Toast.LENGTH_SHORT).show();
-                        Log.v(TAG, "Error adding document", e);
-                    }
-                });
     }
 
     @Override
