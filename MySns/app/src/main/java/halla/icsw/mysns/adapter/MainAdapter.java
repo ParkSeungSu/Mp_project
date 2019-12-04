@@ -1,6 +1,7 @@
 package halla.icsw.mysns.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import java.util.Locale;
 
 import halla.icsw.mysns.PostInfo;
 import halla.icsw.mysns.R;
+import halla.icsw.mysns.activity.PostActivity;
 import halla.icsw.mysns.listener.OnPostListener;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
@@ -64,7 +66,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(activity, PostActivity.class);
+                intent.putExtra("postInfo", mDataset.get(itemViewHolder.getAdapterPosition()));
+                activity.startActivity(intent);
             }
         });
 
@@ -87,19 +91,19 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         TextView createdAtTextView = cardView.findViewById(R.id.createAtTextView);
         createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(mDataset.get(position).getCreatedAt()));
 
-        LinearLayout contnentsLayout = cardView.findViewById(R.id.contentsLayout);
+        LinearLayout contentsLayout = cardView.findViewById(R.id.contentsLayout);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ArrayList<String> contentsList = mDataset.get(position).getContents();
 
-        if (contnentsLayout.getTag() == null || !contnentsLayout.getTag().equals(contentsList)) {
-            contnentsLayout.setTag(contentsList);
-            contnentsLayout.removeAllViews();
+        if (contentsLayout.getTag() == null || !contentsLayout.getTag().equals(contentsList)) {
+            contentsLayout.setTag(contentsList);
+            contentsLayout.removeAllViews();
             final int MORE_INDEX = 2;
             for (int i = 0; i < contentsList.size(); i++) {
                 if (i == MORE_INDEX) {
                     TextView textView = new TextView(activity);
                     textView.setLayoutParams(layoutParams);
-                    contnentsLayout.addView(textView);
+                    contentsLayout.addView(textView);
                     textView.setText("더보기..");
                     break;
                 }
@@ -109,14 +113,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
                     imageView.setLayoutParams(layoutParams);
                     imageView.setAdjustViewBounds(true);
                     imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                    contnentsLayout.addView(imageView);
+                    contentsLayout.addView(imageView);
                     Glide.with(activity).load(contents).override(1000).thumbnail(0.1f).into(imageView);
                 } else {
                     TextView textView = new TextView(activity);
                     textView.setLayoutParams(layoutParams);
                     textView.setText(contents);
                     textView.setTextColor(Color.BLACK);
-                    contnentsLayout.addView(textView);
+                    contentsLayout.addView(textView);
 
                 }
             }

@@ -3,27 +3,37 @@ package halla.icsw.mysns;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PostInfo implements Serializable {
     private String title;
-    private ArrayList<String>  Contents;
+    private ArrayList<String>  contents;
     private String publisher;
     private Date createdAt;
     private String id;
 
     public PostInfo(String title, ArrayList<String>  contents, String publisher, Date createdAt,String id){
       this.title=title;
-      this.Contents=contents;
+      this.contents=contents;
       this.publisher=publisher;
       this.createdAt=createdAt;
       this.id=id;
     }
     public PostInfo(String title, ArrayList<String>  contents, String publisher, Date createdAt){
         this.title=title;
-        this.Contents=contents;
+        this.contents=contents;
         this.publisher=publisher;
         this.createdAt=createdAt;
 
+    }
+    public Map<String,Object> getPostInfo(){
+        Map<String, Object> docData=new HashMap<>();
+        docData.put("title",title);
+        docData.put("contents",contents);
+        docData.put("publisher",publisher);
+        docData.put("createdAt",createdAt);
+        return docData;
     }
 
     public String getTitle() {
@@ -35,11 +45,11 @@ public class PostInfo implements Serializable {
     }
 
     public ArrayList<String>  getContents() {
-        return Contents;
+        return contents;
     }
 
     public void setContents(ArrayList<String>  contents) {
-        Contents = contents;
+        this.contents = contents;
     }
 
     public String getPublisher() {

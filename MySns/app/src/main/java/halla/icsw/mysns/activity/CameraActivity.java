@@ -27,8 +27,7 @@ public class CameraActivity extends BasicActivity {
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            //mBackgroundHandler.post(new Camera2BasicFragment.ImageUpLoader(reader.acquireNextImage()));
-            Log.e("로그: ", "캡처");
+
             Image mImage = reader.acquireNextImage();
             File mFile = new File(getExternalFilesDir(null), "profileImage.jpg");
 
@@ -51,9 +50,9 @@ public class CameraActivity extends BasicActivity {
                     }
                 }
             }
-            Intent resultIntent=new Intent();
-            resultIntent.putExtra("profilePath",mFile.toString());
-            setResult(Activity.RESULT_OK,resultIntent);
+            Intent intent=new Intent();
+            intent.putExtra("profilePath",mFile.toString());
+            setResult(Activity.RESULT_OK,intent);
             camera2BasicFragment.closeCamera();
             finish();
         }

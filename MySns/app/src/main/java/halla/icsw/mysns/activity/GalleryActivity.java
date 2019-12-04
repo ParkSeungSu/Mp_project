@@ -75,7 +75,11 @@ public class GalleryActivity extends BasicActivity {
         String PathOfImage = null;
         String[] projection;
         Intent intent = getIntent();
-        if (intent.getStringExtra("media").equals("video")) {
+        String media=intent.getStringExtra("media");
+        if(media==null){
+            media="image";
+        }
+        if (media.equals("video")) {
             uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             projection = new String[]{MediaStore.MediaColumns.DATA, MediaStore.Video.Media.BUCKET_DISPLAY_NAME};
         } else {
