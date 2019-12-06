@@ -1,124 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-   >
+    android:layout_height="match_parent">
+
     <include
         layout="@layout/view_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:layout_below="@+id/toolbar">
-
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:text="회원정보"
-            android:textColor="#000000"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+        android:layout_below="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
             android:orientation="vertical"
             android:padding="10dp">
 
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="회원정보"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                app:cardCornerRadius="100dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-                <ImageView
-                    android:id="@+id/profileImageView"
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    app:cardCornerRadius="100dp">
+
+                    <ImageView
+                        android:id="@+id/profileImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@mipmap/ic_launcher_round" />
+                </androidx.cardview.widget.CardView>
+
+                <EditText
+                    android:id="@+id/nameEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    app:srcCompat="@mipmap/ic_launcher_round" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="이름"
+                    android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/nameEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="이름"
-                android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/phoneNumberEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="전화번호"
+                    android:inputType="phone" />
 
-            <EditText
-                android:id="@+id/phoneNumberEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="전화번호"
-                android:inputType="phone" />
+                <EditText
+                    android:id="@+id/birthEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="생년월일"
+                    android:inputType="date" />
 
-            <EditText
-                android:id="@+id/birthEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="생년월일"
-                android:inputType="date" />
+                <EditText
+                    android:id="@+id/addressEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="주소"
+                    android:inputType="textPostalAddress" />
 
-            <EditText
-                android:id="@+id/addressEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="주소"
-                android:inputType="textPostalAddress" />
-
-            <Button
-                android:id="@+id/checkButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="확인" />
+                <Button
+                    android:id="@+id/checkButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="확인" />
 
 
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/buttonsCard"
+    <RelativeLayout
+        android:id="@+id/buttonsBackgroundLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:elevation="10dp"
-        android:visibility="gone"
-        app:cardBackgroundColor="@color/colorPrimary"
-        app:cardCornerRadius="15dp">
+        android:layout_height="match_parent"
+        android:background="#99575757"
+        tools:visibility="gone">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:elevation="10dp"
+            android:visibility="visible"
+            app:cardBackgroundColor="#8493E2"
+            app:cardCornerRadius="15dp">
 
-            <Button
-                android:id="@+id/gallery"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="갤러리" />
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-            <Button
-                android:id="@+id/picture"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="사진촬영" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/gallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="갤러리" />
 
-    </androidx.cardview.widget.CardView>
+                <Button
+                    android:id="@+id/picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="사진촬영" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
 
     <include
         layout="@layout/view_loader"

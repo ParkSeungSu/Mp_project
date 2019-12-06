@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
     <include
         layout="@layout/view_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="#007FA4E7" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,6 +54,7 @@
                 android:id="@+id/LoginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#7481F8"
                 android:text="로그인" />
 
             <Button

@@ -24,6 +24,7 @@ public class LoginActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setToolbarTitle("Login");
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.LoginButton).setOnClickListener(onClickListener);
         findViewById(R.id.gotoPasswordResetButton).setOnClickListener(onClickListener);

@@ -43,16 +43,23 @@ public class MemberInitActivity extends BasicActivity {
     private String profilePath;
     private FirebaseUser user;
     private RelativeLayout loaderLayout;
+    private RelativeLayout buttonsBackgroundLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_init);
+        setToolbarTitle("회원정보");
         loaderLayout=findViewById(R.id.loaderlayout);
+        buttonsBackgroundLayout=findViewById(R.id.buttonsBackgroundLayout);
+        buttonsBackgroundLayout.setOnClickListener(onClickListener);
+        buttonsBackgroundLayout.setVisibility(View.GONE);
+
         profileImageView = findViewById(R.id.profileImageView);
         profileImageView.setOnClickListener(onClickListener);
         findViewById(R.id.checkButton).setOnClickListener(onClickListener);
         findViewById(R.id.gallery).setOnClickListener(onClickListener);
         findViewById(R.id.picture).setOnClickListener(onClickListener);
+
 
     }
 
@@ -70,6 +77,7 @@ public class MemberInitActivity extends BasicActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     profilePath = data.getStringExtra("profilePath");
                     Glide.with(this).load(profilePath).centerCrop().override(500).into(profileImageView);
+                    buttonsBackgroundLayout.setVisibility(View.GONE);
                 }
                 break;
             }
@@ -84,14 +92,10 @@ public class MemberInitActivity extends BasicActivity {
                     storageUpdate();
                     break;
                 case R.id.profileImageView:
-                    CardView cardView=findViewById(R.id.buttonsCard);
-                    Log.e("a","a");
-                    if(cardView.getVisibility()==View.VISIBLE){
-                        cardView.setVisibility(View.INVISIBLE);
-                    }else{
-                        cardView.setVisibility(View.VISIBLE);
-                    }
-
+                    buttonsBackgroundLayout.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.buttonsBackgroundLayout:
+                    buttonsBackgroundLayout.setVisibility(View.GONE);
                     break;
                 case R.id.picture:
                     myStartMain(CameraActivity.class);
@@ -190,7 +194,6 @@ private void storageUploader( MemberInfo memberInfo){
 }
     private void myStartMain(Class c) {
         Intent intent = new Intent(this, c);
-
         startActivityForResult(intent, 0);
     }
 

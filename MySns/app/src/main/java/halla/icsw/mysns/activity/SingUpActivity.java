@@ -24,6 +24,7 @@ public class SingUpActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        setToolbarTitle("Sign Up");
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.singUpButton).setOnClickListener(onClickListener);
         findViewById(R.id.gotoLoginButton).setOnClickListener(onClickListener);

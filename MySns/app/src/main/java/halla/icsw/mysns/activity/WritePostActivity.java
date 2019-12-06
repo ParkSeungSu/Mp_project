@@ -4,11 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.view.ViewGroup;
+
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +35,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -63,6 +63,7 @@ public class WritePostActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_post);
+        setToolbarTitle("Post");
         parent = findViewById(R.id.contentsLayout);
         buttonsBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
         contentsEditText = findViewById(R.id.contentsEditText);
@@ -120,26 +121,32 @@ public class WritePostActivity extends BasicActivity {
                     break;
                 case R.id.delete:
                     final View selectedView = (View) selectedImageView.getParent();
-                    String[] list = pathList.get(parent.indexOfChild(selectedView) - 1).split("\\?");
+                    String path = pathList.get(parent.indexOfChild(selectedView) - 1);
+                    String[] list = path.split("\\?");
                     String[] list2 = list[0].split("%2F");
                     String name = list2[list2.length - 1];
+                    if (Patterns.WEB_URL.matcher(path).matches() && path.contains("https://firebasestorage.googleapis.com/v0/b/sns-project-cb9e5.appspot.com/o/post")) {
+                        StorageReference desertRef = storageRef.child("posts/" + postInfo.getId() + "/" + name);
+                        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(WritePostActivity.this, "파일을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                                pathList.remove(parent.indexOfChild(selectedView) - 1);
+                                parent.removeView(selectedView);
+                                buttonsBackgroundLayout.setVisibility(View.GONE);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(WritePostActivity.this, "파일 삭제하는데 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                    StorageReference desertRef = storageRef.child("posts/" + postInfo.getId() + "/" + name);
-                    desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(WritePostActivity.this, "파일을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
-                            pathList.remove(parent.indexOfChild(selectedView) - 1);
-                            parent.removeView(selectedView);
-                            buttonsBackgroundLayout.setVisibility(View.GONE);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(WritePostActivity.this, "파일 삭제하는데 실패", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+                    } else {
+                        pathList.remove(parent.indexOfChild(selectedView) - 1);
+                        parent.removeView(selectedView);
+                        buttonsBackgroundLayout.setVisibility(View.GONE);
+                    }
                     break;
 
             }
@@ -160,6 +167,7 @@ public class WritePostActivity extends BasicActivity {
         if (title.length() > 0) {
             loaderLayout.setVisibility(View.VISIBLE);
             final ArrayList<String> contentsList = new ArrayList<>();
+            final ArrayList<String> formatList = new ArrayList<>();
             user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
@@ -175,11 +183,21 @@ public class WritePostActivity extends BasicActivity {
                         String text = ((EditText) view).getText().toString();
                         if (text.length() > 0) {
                             contentsList.add(text);
+                            formatList.add("text");
                         }
                     } else if (!Patterns.WEB_URL.matcher(pathList.get(pathCount)).matches()) {
                         String path = pathList.get(pathCount);
                         successCount++;
                         contentsList.add(path);
+
+                        if (isImageFile(path)) {
+                            formatList.add("image");
+                        } else if (isVideoFile(path)) {
+                            formatList.add("video");
+                        } else {
+                            formatList.add("text");
+                        }
+
                         String[] pathArray = path.split("\\.");
                         final StorageReference mountainsRef = storageRef.child("posts/" + documentReference.getId() + "/" + pathCount + "." + pathArray[pathArray.length - 1]);
                         try {
@@ -202,7 +220,7 @@ public class WritePostActivity extends BasicActivity {
                                             successCount--;
                                             contentsList.set(index, uri.toString());
                                             if (successCount == 0) {
-                                                PostInfo postInfo = new PostInfo(title, contentsList, user.getUid(), date);
+                                                PostInfo postInfo = new PostInfo(title, contentsList, formatList, user.getUid(), date);
                                                 storeUploader(documentReference, postInfo);
                                                 Toast.makeText(WritePostActivity.this, "업로드 완료!", Toast.LENGTH_SHORT).show();
                                             }
@@ -218,19 +236,22 @@ public class WritePostActivity extends BasicActivity {
                 }
             }
             if (successCount == 0) {
-                storeUploader(documentReference, new PostInfo(title, contentsList, user.getUid(), date));
+                storeUploader(documentReference, new PostInfo(title, contentsList, formatList, user.getUid(), date));
             }
         } else {
             Toast.makeText(this, "제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void storeUploader(DocumentReference documentReference, PostInfo postInfo) {
+    private void storeUploader(DocumentReference documentReference, final PostInfo postInfo) {
         documentReference.set(postInfo.getPostInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         loaderLayout.setVisibility(View.GONE);
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("postInfo", postInfo);
+                        setResult(Activity.RESULT_OK, resultIntent);
                         Toast.makeText(WritePostActivity.this, "게시물 등록을 성공하였습니다.", Toast.LENGTH_SHORT).show();
                         finish();
                     }
@@ -323,5 +344,15 @@ public class WritePostActivity extends BasicActivity {
         Intent intent = new Intent(this, c);
         intent.putExtra("media", media);
         startActivityForResult(intent, requestCode);
+    }
+
+    private boolean isImageFile(String path) {
+        String mimeType = URLConnection.guessContentTypeFromName(path);
+        return mimeType != null && mimeType.startsWith("image");
+    }
+
+    private boolean isVideoFile(String path) {
+        String mimeType = URLConnection.guessContentTypeFromName(path);
+        return mimeType != null && mimeType.startsWith("video");
     }
 }

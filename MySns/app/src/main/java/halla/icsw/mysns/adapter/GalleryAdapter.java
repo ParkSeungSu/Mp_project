@@ -35,6 +35,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         this.activity = activity;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+
     @NonNull
     @Override
     public GalleryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,14 +55,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
                 activity.finish();
             }
         });
+
+        ImageView imageView = cardView.findViewById(R.id.imageView);
+        Glide.with(activity).load(mDataset.get(viewType)).centerCrop().override(500).into(imageView);
+
         return galleryViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-        CardView cardView = holder.cardView;
-        ImageView imageView = cardView.findViewById(R.id.imageView);
-        Glide.with(activity).load(mDataset.get(position)).centerCrop().override(500).into(imageView);
+        //CardView cardView = holder.cardView;
 
     }
 
