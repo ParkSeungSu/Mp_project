@@ -2,7 +2,6 @@ package halla.icsw.mysns.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +27,7 @@ import halla.icsw.mysns.activity.WritePostActivity;
 import halla.icsw.mysns.listener.OnPostListener;
 import halla.icsw.mysns.view.ReadContentsView;
 
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
     private ArrayList<PostInfo> mDataset;
     private Activity activity;
     private final int MORE_INDEX = 2;
@@ -45,7 +44,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         }
     }
 
-    public MainAdapter(Activity activity, ArrayList<PostInfo> myDataset) {
+    public HomeAdapter(Activity activity, ArrayList<PostInfo> myDataset) {
         this.mDataset = myDataset;
         this.activity = activity;
         firebaseHelper = new FirebaseHelper(activity);
@@ -64,7 +63,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     @NonNull
     @Override
-    public MainAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HomeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
         final MyViewHolder itemViewHolder = new MyViewHolder(cardView);
         cardView.setOnClickListener(new View.OnClickListener() {

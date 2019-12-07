@@ -3,13 +3,17 @@ package halla.icsw.mysns.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+
+import java.util.Locale;
 
 import halla.icsw.mysns.FirebaseHelper;
 import halla.icsw.mysns.PostInfo;
@@ -17,11 +21,12 @@ import halla.icsw.mysns.R;
 import halla.icsw.mysns.listener.OnPostListener;
 import halla.icsw.mysns.view.ReadContentsView;
 
-public class PostActivity extends BasicActivity {
+public class PostActivity extends BasicActivity{
     private  PostInfo postInfo;
     private FirebaseHelper firebaseHelper;
     private  ReadContentsView readContentsView;
     private LinearLayout contentsLayout;
+    private TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +34,27 @@ public class PostActivity extends BasicActivity {
         setContentView(R.layout.activity_post);
 
         postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");
+        tts= new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status==TextToSpeech.SUCCESS){
+                    Locale locale=Locale.getDefault();
+                    if(tts.isLanguageAvailable(locale)>=TextToSpeech.LANG_AVAILABLE)
+                        tts.setLanguage(locale);
+                    else
+                        Toast.makeText(PostActivity.this, "지원하지 않는 언어 오류", Toast.LENGTH_SHORT).show();
+                    tts.speak(postInfo.getTitle()+" 게시물 입니다.",TextToSpeech.QUEUE_FLUSH,null);
+                }else {
+                    Toast.makeText(PostActivity.this, "음성 합성 초기화 오류", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         contentsLayout=findViewById(R.id.contentsLayout);
         readContentsView = findViewById(R.id.readContentsView);
 
         firebaseHelper=new FirebaseHelper(this);
         firebaseHelper.setOnPostListener(onPostListener);
         uiUpdate();
-
     }
 
     @Override
@@ -94,5 +113,14 @@ public class PostActivity extends BasicActivity {
         Intent intent = new Intent(this, c);
         intent.putExtra("postInfo", postInfo);
         startActivityForResult(intent,0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(tts!=null){
+            tts.stop();
+            tts.shutdown();
+        }
     }
 }

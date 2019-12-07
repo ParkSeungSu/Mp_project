@@ -2,7 +2,6 @@ package halla.icsw.mysns.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -34,7 +33,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import halla.icsw.mysns.MemberInfo;
+import halla.icsw.mysns.UserInfo;
 import halla.icsw.mysns.R;
 
 public class MemberInitActivity extends BasicActivity {
@@ -47,7 +46,7 @@ public class MemberInitActivity extends BasicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_member_init);
+        setContentView(R.layout.activity_user_init);
         setToolbarTitle("회원정보");
         loaderLayout=findViewById(R.id.loaderlayout);
         buttonsBackgroundLayout=findViewById(R.id.buttonsBackgroundLayout);
@@ -135,8 +134,8 @@ public class MemberInitActivity extends BasicActivity {
             final StorageReference mountainsRef = storageRef.child("users/" + user.getUid() + "profileImage.jpg");
 
          if(profilePath==null){
-             MemberInfo memberInfo = new MemberInfo(name, phone, birth, address);
-             storageUploader(memberInfo);
+             UserInfo userInfo = new UserInfo(name, phone, birth, address);
+             storageUploader(userInfo);
          }else{
              try {
                  InputStream stream = new FileInputStream(new File(profilePath));
@@ -155,8 +154,8 @@ public class MemberInitActivity extends BasicActivity {
                      public void onComplete(@NonNull Task<Uri> task) {
                          if (task.isSuccessful()) {
                              Uri downloadUri = task.getResult();
-                             MemberInfo memberInfo = new MemberInfo(name, phone, birth, address, downloadUri.toString());
-                             storageUploader(memberInfo);
+                             UserInfo userInfo = new UserInfo(name, phone, birth, address, downloadUri.toString());
+                             storageUploader(userInfo);
                          } else {
                              Toast.makeText(MemberInitActivity.this, "회원정보 전송 오류", Toast.LENGTH_SHORT).show();
                          }
@@ -172,9 +171,9 @@ public class MemberInitActivity extends BasicActivity {
         }
 
     }
-private void storageUploader( MemberInfo memberInfo){
+private void storageUploader( UserInfo userInfo){
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    db.collection("users").document(user.getUid()).set(memberInfo)
+    db.collection("users").document(user.getUid()).set(userInfo)
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {

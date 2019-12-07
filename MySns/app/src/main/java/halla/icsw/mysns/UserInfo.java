@@ -1,19 +1,19 @@
 package halla.icsw.mysns;
 
-public class MemberInfo {
+public class UserInfo {
     private String name;
     private String phone;
     private String birth;
     private String address;
     private String photoUrl;
-    public MemberInfo(String name,String phone,String birth,String address,String photoUrl){
+    public UserInfo(String name, String phone, String birth, String address, String photoUrl){
         this.name=name;
         this.phone=phone;
         this.birth=birth;
         this.address=address;
         this.photoUrl=photoUrl;
     }
-    public MemberInfo(String name,String phone,String birth,String address){
+    public UserInfo(String name, String phone, String birth, String address){
         this.name=name;
         this.phone=phone;
         this.birth=birth;

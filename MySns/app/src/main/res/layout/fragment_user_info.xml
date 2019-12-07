@@ -5,11 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        layout="@layout/view_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,92 +48,60 @@
                         app:srcCompat="@mipmap/ic_launcher_round" />
                 </androidx.cardview.widget.CardView>
 
-                <EditText
-                    android:id="@+id/nameEditText"
+                <TextView
+                    android:id="@+id/nameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="이름"
-                    android:inputType="textPersonName" />
+                    android:layout_margin="5dp"
+                    android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/phoneNumberEditText"
+                <TextView
+                    android:id="@+id/phoneNumberText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="전화번호"
-                    android:inputType="phone" />
+                    android:layout_margin="5dp"
+                    android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/birthEditText"
+                <TextView
+                    android:id="@+id/birthText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="생년월일"
-                    android:inputType="date" />
+                    android:layout_margin="5dp"
+                    android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/addressEditText"
+                <TextView
+                    android:id="@+id/addressText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="주소"
-                    android:inputType="textPostalAddress" />
-
-                <Button
-                    android:id="@+id/checkButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="확인" />
+                    android:layout_margin="5dp"
+                    android:textSize="18sp" />
 
 
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
 
-    <RelativeLayout
-        android:id="@+id/buttonsBackgroundLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99575757"
-        tools:visibility="gone">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:elevation="10dp"
-            android:visibility="visible"
-            app:cardBackgroundColor="#8493E2"
-            app:cardCornerRadius="15dp">
-
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="5dp">
+                android:layout_margin="5dp"
+                app:cardCornerRadius="80dp"
+                app:cardPreventCornerOverlap="false">
 
                 <Button
-                    android:id="@+id/gallery"
+                    android:id="@+id/LogoutButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="갤러리" />
-
-                <Button
-                    android:id="@+id/picture"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="사진촬영" />
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-    </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:background="#8F98EC"
+                    android:text="로그아웃"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 
     <include
         layout="@layout/view_loader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="gone" />
 </RelativeLayout>
