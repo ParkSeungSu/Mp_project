@@ -2,6 +2,10 @@ package halla.icsw.mysns.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,7 +47,7 @@ import halla.icsw.mysns.R;
 import halla.icsw.mysns.PostInfo;
 import halla.icsw.mysns.view.ContentsItemView;
 
-public class WritePostActivity extends BasicActivity {
+public class WritePostActivity extends BasicActivity implements SensorEventListener {
 
     private ArrayList<String> pathList = new ArrayList<>();
     private FirebaseUser user;
@@ -58,11 +62,18 @@ public class WritePostActivity extends BasicActivity {
     private int successCount;
     private PostInfo postInfo;
     private StorageReference storageRef;
-
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private long mShakeTime;
+    private static final int SHAKE_SKIP_TIME=500;
+    private static final float SHAKE_THRESHOLD_GRAVITY=2.7f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_post);
+        mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
         setToolbarTitle("Post");
         parent = findViewById(R.id.contentsLayout);
         buttonsBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
@@ -354,5 +365,48 @@ public class WritePostActivity extends BasicActivity {
     private boolean isVideoFile(String path) {
         String mimeType = URLConnection.guessContentTypeFromName(path);
         return mimeType != null && mimeType.startsWith("video");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this,mAccelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+            float axisX=event.values[0];
+            float axisY=event.values[1];
+            float axisZ=event.values[2];
+
+            float gravityX= axisX/SensorManager.GRAVITY_EARTH;
+            float gravityY= axisY/SensorManager.GRAVITY_EARTH;
+            float gravityZ= axisZ/SensorManager.GRAVITY_EARTH;
+
+            Float f=gravityX*gravityX+gravityY*gravityY+gravityZ*gravityZ;
+            double squaredD=Math.sqrt(f.doubleValue());
+            float gForce=(float)squaredD;
+            if(gForce>SHAKE_THRESHOLD_GRAVITY){
+                long currentTime = System.currentTimeMillis();
+                if(mShakeTime+SHAKE_SKIP_TIME>currentTime){
+                    return;
+                }
+                mShakeTime=currentTime;
+                Log.e("shake: ","shake");
+                storageUpload();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
